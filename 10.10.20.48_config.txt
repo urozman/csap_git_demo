@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 6736 bytes
+Current configuration : 7561 bytes
 !
-! Last configuration change at 09:10:34 UTC Thu Feb 18 2021 by developer
+! Last configuration change at 10:25:58 UTC Thu Feb 18 2021 by developer
 !
 version 17.3
 service timestamps debug datetime msec
@@ -17,6 +17,46 @@ hostname csr1000v-1
 boot-start-marker
 boot-end-marker
 !
+!
+vrf definition blue
+ description Blue VRF
+ rd 1:410
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+vrf definition green
+ description Green VRF
+ rd 1:420
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+vrf definition red
+ description Red VRF
+ rd 1:400
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+vrf definition urozman
+ description urozman VRF
+ rd 1:26
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
 !
 enable secret 9 $9$GNcSrWbM1PyCqU$9.BCza34ClqbgyABGzRV1v5hjCWhaoN9K.gqxCtcCvE
 !
@@ -170,8 +210,27 @@ redundancy
 !
 !
 interface Loopback26
- description Pod Number 26
  ip address 10.111.26.1 255.255.255.255
+!
+interface Loopback1126
+ description Pod Number 1126
+ vrf forwarding red
+ no ip address
+!
+interface Loopback1226
+ description Pod Number 1226
+ vrf forwarding blue
+ no ip address
+!
+interface Loopback1326
+ description Pod Number 1326
+ vrf forwarding green
+ no ip address
+!
+interface Loopback1426
+ description Pod Number 1426
+ vrf forwarding urozman
+ no ip address
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -241,10 +300,6 @@ call-home
  profile "CiscoTAC-1"
   active
   destination transport-method http
-ntp server 10.11.26.65
-ntp server 10.12.26.65
-ntp server 10.13.26.65
-ntp server 10.14.26.65
 !
 !
 !
