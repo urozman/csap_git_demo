@@ -1,9 +1,8 @@
-
 Building configuration...
 
-Current configuration : 6541 bytes
+Current configuration : 6736 bytes
 !
-! Last configuration change at 07:19:20 UTC Thu Feb 18 2021
+! Last configuration change at 09:10:34 UTC Thu Feb 18 2021 by developer
 !
 version 17.3
 service timestamps debug datetime msec
@@ -170,6 +169,10 @@ redundancy
 ! 
 !
 !
+interface Loopback26
+ description Pod Number 26
+ ip address 10.111.26.1 255.255.255.255
+!
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
  ip address 10.10.20.48 255.255.255.0
@@ -238,6 +241,10 @@ call-home
  profile "CiscoTAC-1"
   active
   destination transport-method http
+ntp server 10.11.26.65
+ntp server 10.12.26.65
+ntp server 10.13.26.65
+ntp server 10.14.26.65
 !
 !
 !
