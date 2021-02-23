@@ -1,15 +1,15 @@
 Building configuration...
 
-Current configuration : 7561 bytes
+Current configuration : 7858 bytes
 !
-! Last configuration change at 10:25:58 UTC Thu Feb 18 2021 by developer
+! Last configuration change at 14:18:43 UTC Tue Feb 23 2021 by developer
 !
-version 17.3
+version 16.11
 service timestamps debug datetime msec
 service timestamps log datetime msec
 service call-home
 platform qfp utilization monitor load 80
-platform punt-keepalive disable-kernel-core
+no platform punt-keepalive disable-kernel-core
 platform console virtual
 !
 hostname csr1000v-1
@@ -50,7 +50,7 @@ vrf definition red
 !
 vrf definition urozman
  description urozman VRF
- rd 1:26
+ rd 1:28
  !
  address-family ipv4
  exit-address-family
@@ -58,9 +58,18 @@ vrf definition urozman
  address-family ipv6
  exit-address-family
 !
-enable secret 9 $9$GNcSrWbM1PyCqU$9.BCza34ClqbgyABGzRV1v5hjCWhaoN9K.gqxCtcCvE
+no logging console
+enable secret 9 $9$4fdKs44VXjq2x.$Zahb8Zy6RQwM9ONMvWkNq4k3igSv4v2KkH/uUuqr09s
 !
 no aaa new-model
+call-home
+ ! If contact email address in call-home is configured as sch-smart-licensing@cisco.com
+ ! the email address configured in Cisco Smart License Portal will be used as contact email address to send SCH notifications.
+ contact-email-addr sch-smart-licensing@cisco.com
+ profile "CiscoTAC-1"
+  active
+  destination transport-method http
+  no destination transport-method email
 !
 !
 !
@@ -68,7 +77,7 @@ no aaa new-model
 !
 !
 !
-ip domain name lab.devnetsandbox.local
+ip domain name abc.inc
 !
 !
 !
@@ -101,47 +110,45 @@ multilink bundle-name authenticated
 !
 !
 !
-!
-!
-crypto pki trustpoint TP-self-signed-807034967
+crypto pki trustpoint TP-self-signed-2447580374
  enrollment selfsigned
- subject-name cn=IOS-Self-Signed-Certificate-807034967
+ subject-name cn=IOS-Self-Signed-Certificate-2447580374
  revocation-check none
- rsakeypair TP-self-signed-807034967
+ rsakeypair TP-self-signed-2447580374
 !
 crypto pki trustpoint SLA-TrustPoint
  enrollment pkcs12
  revocation-check crl
 !
 !
-crypto pki certificate chain TP-self-signed-807034967
+crypto pki certificate chain TP-self-signed-2447580374
  certificate self-signed 01
-  3082032E 30820216 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
-  30312E30 2C060355 04031325 494F532D 53656C66 2D536967 6E65642D 43657274 
-  69666963 6174652D 38303730 33343936 37301E17 0D323030 39303131 34353134 
-  385A170D 33303039 30313134 35313438 5A303031 2E302C06 03550403 1325494F 
-  532D5365 6C662D53 69676E65 642D4365 72746966 69636174 652D3830 37303334 
-  39363730 82012230 0D06092A 864886F7 0D010101 05000382 010F0030 82010A02 
-  82010100 B2A6EECF B2BAF984 F48D24CB 9979B139 A9C57F7F 29A4037D 6536E191 
-  10546865 82D58D1B B5DF34EE DD1EC4B3 E0634D1C 99B6B135 15DE8774 53E2E43C 
-  969AD39E E898E57C 341FBFDD AE283528 32C517C3 E81458CA 496F9B51 0D3242BF 
-  AECAA459 1954E01A 94D55D6B 5A4EB147 01446BAD 984F0EC5 EC1F0BCD E736BF7A 
-  D2DB9375 420A7B8C D765D9FF 6E444EAA 83804E55 C2CE8D54 A65DA586 BFF1D66F 
-  4B196EB1 B1E22929 F057E19B 7093CA0E 56667DBE B1B5A746 1045CD5A 9C4C8549 
-  3152D4E6 68CFB634 B4DD2845 34160100 D367F8C3 84A7606C 3498440B 4DA9163C 
-  B5C54A31 66411E7B B571D01E AFA6E04F EE9FE2CD 29503E89 EAAD8188 55268697 
-  D976CE79 02030100 01A35330 51300F06 03551D13 0101FF04 05300301 01FF301F 
-  0603551D 23041830 1680144C A132DB18 AC3EA0E0 2768EC0A 90CEE986 AA378430 
-  1D060355 1D0E0416 04144CA1 32DB18AC 3EA0E027 68EC0A90 CEE986AA 3784300D 
-  06092A86 4886F70D 01010505 00038201 01007F50 96E2094F 779B3CAD 6DEFD6AB 
-  C40EFFFB A4608AFF 27C9BEFD B7A3D02A 2E114A81 7A42EAFE D2B155BD C18C6BAC 
-  B4579207 C20E11FB B4CD6227 97659759 064783D1 3D4F77AC E50CDE35 7E33EB3B 
-  8A00CF77 B86B09E7 4AE5B9B2 BADF5B3E DA02A2B9 5DC50F3A FE6C3240 903B9ABF 
-  110260C1 424B1BE3 D8D6C45A 9AE8C499 3637969E 2230D292 04B84915 FF500092 
-  66DC0C1D 6A034A64 065CD635 73193D40 5C051E90 277C4445 C794EDFA B9A5B783 
-  79F22F04 DCD7C240 0FDEF168 D9F6706B 6B24E6ED C8D6F1BE E8EACA1E 29693E20 
-  CB84D6EC 505A2F00 89C820AD 86963CE5 009B93E1 19E3D732 3206BE52 923E2059 
-  E18D057C 7677C230 8994B4E5 CE2B1FD8 88B5
+  30820330 30820218 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 32343437 35383033 3734301E 170D3139 30353232 31393531 
+  30365A17 0D333030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D32 34343735 
+  38303337 34308201 22300D06 092A8648 86F70D01 01010500 0382010F 00308201 
+  0A028201 0100A669 09194129 C170BD16 BDA1ACB8 DEFFC421 295AD975 6DD2B7A2 
+  31670193 FB2EB1D5 35B2AF31 C3CBBFD4 88FEA820 7F015A5B 4CA5ACD5 A4371AA9 
+  BA8C209D D1E9CC7B 4A3EA1AB 14A80E7F 61994950 89E778A2 E3DD5183 DC67EB5E 
+  5331BACB 02D26BA0 5EAAE887 EE21CC1F B95EC572 06D34555 3D0BD1A2 8E0C271F 
+  52F3DC63 3C56012A 62DAD3BB 3A38BC92 6EE860F5 346CD984 40AE7C8B 2D3FBE63 
+  891AE7A1 BB99A51F D37C840E 325A98D3 A63DAAD8 97381670 1ACF718D 975AEAC1 
+  3B0F1081 972B8678 9B368C12 7F1BF678 4944628B 1955E77D 829DCF1A 44425712 
+  3C282C6D 50232EF1 CF5E44BE 3C031404 406FF38D 8FC48D58 1B45B4CF 16F37E8C 
+  ADC225EF 53E30203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 
+  301F0603 551D2304 18301680 145D1E8E 0C1B37EF 7538C2C6 C5BA319B 9FF26621 
+  5D301D06 03551D0E 04160414 5D1E8E0C 1B37EF75 38C2C6C5 BA319B9F F266215D 
+  300D0609 2A864886 F70D0101 05050003 82010100 69A18B55 2E48E701 258263C0 
+  F6AB2064 F86792A6 DB0ED73E 1DB0E676 857E59B9 C2725FD9 139571CA 440BDC88 
+  0609FC15 A8695F45 92CE6040 98AE4B83 14A6CDB9 1A973968 E638E830 F356C653 
+  7383CC4A 5F30B161 1C3C2C90 8D098BC0 B35A4AB9 30D2A0A6 9EDDA892 A5D8601D 
+  D37981CA ABBFFE1B F057A8C1 D5DF47D2 6E5C4955 3EA4B4BA D6CB9EE5 1ADCD01A 
+  444B9C3E C935AC24 EAF3784F DBDC8F6F 258EA394 74543AA9 BB908AFC 56DDAA9C 
+  C383E5A7 5022F4D4 BED42FF4 0832AB28 1BF0E0AE F25EA02B 13895868 FAB23027 
+  8B761CA2 BA002D73 53499E0B A0B169C5 B7AB5B35 F5CF03ED 96C911D4 C67744AD 
+  F42A3E45 139C0E07 11B247E0 FA1E359F 697CF44B
   	quit
 crypto pki certificate chain SLA-TrustPoint
  certificate ca 01
@@ -173,15 +180,20 @@ crypto pki certificate chain SLA-TrustPoint
   D697DF7F 28
   	quit
 !
-license udi pid CSR1000V sn 9BD2C5XZ3AL
+license udi pid CSR1000V sn 9Q12989CHVR
 license boot level ax
 diagnostic bootup level minimal
-memory free low-watermark processor 71556
-!
 !
 spanning-tree extend system-id
+memory free low-watermark processor 80557
 !
-username developer privilege 15 secret 9 $9$oNguEA9um9vRx.$MsDk0DOy1rzBjKAcySWdNjoKcA7GetG9YNnKOs8S67A
+netconf-yang
+!
+restconf
+!
+username developer privilege 15 secret 9 $9$hXxkjeoVpP1NsE$dJrWUSyHgy2dj/VbEM3Ce.wwesn89iOUyQUbBy76dX.
+username cisco privilege 15 secret 9 $9$yGG2/zjAgFbMt.$UnZG70.Ahe5Q6dkKyWuaIDdmmuc5.4ax8uQxE7zzpQU
+username root privilege 15 secret 9 $9$98fva3XgX2LKbE$NtueqkfF8CJ8eMs8w4ZrVCcqcD3OWs3tVfFRPoeTgl6
 !
 redundancy
 !
@@ -190,9 +202,7 @@ redundancy
 !
 !
 !
-!
 ! 
-!
 !
 !
 !
@@ -209,28 +219,25 @@ redundancy
 ! 
 !
 !
-interface Loopback26
- ip address 10.111.26.1 255.255.255.255
-!
-interface Loopback1126
- description Pod Number 1126
+interface Loopback1128
+ description Pod Number 1128
  vrf forwarding red
- no ip address
+ ip address 10.28.11.1 255.255.255.255
 !
-interface Loopback1226
- description Pod Number 1226
+interface Loopback1228
+ description Pod Number 1228
  vrf forwarding blue
- no ip address
+ ip address 10.28.12.1 255.255.255.255
 !
-interface Loopback1326
- description Pod Number 1326
+interface Loopback1328
+ description Pod Number 1328
  vrf forwarding green
- no ip address
+ ip address 10.28.13.1 255.255.255.255
 !
-interface Loopback1426
- description Pod Number 1426
+interface Loopback1428
+ description Pod Number 1428
  vrf forwarding urozman
- no ip address
+ ip address 10.28.14.1 255.255.255.255
 !
 interface GigabitEthernet1
  description MANAGEMENT INTERFACE - DON'T TOUCH ME
@@ -259,8 +266,8 @@ ip forward-protocol nd
 ip http server
 ip http authentication local
 ip http secure-server
-!
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.10.20.254
+!
 ip ssh rsa keypair-name ssh-key
 ip ssh version 2
 ip scp server enable
@@ -279,32 +286,24 @@ control-plane
 !
 banner motd ^C
 Welcome to the DevNet Sandbox for CSR1000v and IOS XE
- 
+
 The following programmability features are already enabled:
   - NETCONF
   - RESTCONF
- 
+
 Thanks for stopping by.
 ^C
 !
 line con 0
+ exec-timeout 0 0
  stopbits 1
 line vty 0 4
  login local
  transport input ssh
 !
-call-home
- ! If contact email address in call-home is configured as sch-smart-licensing@cisco.com
- ! the email address configured in Cisco Smart License Portal will be used as contact email address to send SCH notifications.
- contact-email-addr sch-smart-licensing@cisco.com
- profile "CiscoTAC-1"
-  active
-  destination transport-method http
 !
 !
 !
 !
 !
-netconf-yang
-restconf
 end
